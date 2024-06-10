@@ -947,7 +947,8 @@ class PreTrainedTokenizerFast(PreTrainedTokenizerBase):
                     curr_state["pretokenizers"][i] = json.loads(new_metaspace.__getstate__().decode("utf-8"))
                 elif pt["type"] == "ByteLevel":
                     # Create a new ByteLevel pre-tokenizer
-                    curr_state["pretokenizers"][i]['add_prefix_space'] = self.add_prefix_space
+                    new_bytelevel = pre_tokenizers.ByteLevel(add_prefix_space=self.add_prefix_space)
+                    curr_state["pretokenizers"][i] = json.loads(new_bytelevel.__getstate__().decode("utf-8"))
                     update_normalizer = False
 
             new_pretokenizer = pre_tokenizers.Sequence([])
