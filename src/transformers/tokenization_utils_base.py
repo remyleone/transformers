@@ -984,7 +984,7 @@ class SpecialTokensMixin:
 
         # if we are adding tokens that were not part of the vocab, we ought to add them
         added_tokens = self.add_tokens(added_tokens, special_tokens=True)
-        self._update_post_processor()
+        self._update_bos_eos_tokens()
         return added_tokens
 
     def add_tokens(
