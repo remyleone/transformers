@@ -163,13 +163,17 @@ class PreTrainedTokenizerFast(PreTrainedTokenizerBase):
             kwargs.setdefault("max_length", _padding["length"])
             kwargs.setdefault("pad_to_multiple_of", _padding["pad_to_multiple_of"])
 
-        self._add_bos_token = kwargs.get("add_bos_token", None)
+        if "add_bos_token" in kwargs or "add_eos_token" in kwargs:
+            self._update_bos_eos_tokens()
+
+        self._add_bos_token = kwargs.get("add_bos_token", True)
         self._add_eos_token = kwargs.get("add_eos_token", None)
 
         # We call this after having initialized the backend tokenizer because we update it.
         super().__init__(**kwargs)
 
-        self._update_bos_eos_tokens()
+        if "add_bos_token" in kwargs or "add_eos_token" in kwargs:
+            self._update_bos_eos_tokens()
 
         # Set the splitting mode for special tokens for the tokenizer to be used throughout the class.
         self._tokenizer.encode_special_tokens = self.split_special_tokens
