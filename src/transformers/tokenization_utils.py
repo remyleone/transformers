@@ -687,9 +687,9 @@ class PreTrainedTokenizer(PreTrainedTokenizerBase):
             if not token:
                 continue
             if idx == 0 and kwargs.get("add_special_tokens", None) is True:
-                kwargs['add_bos_token'] = self.add_bos_token
+                kwargs['add_bos_token'] = getattr(self, "bos_token", None)
             elif idx == len(tokens) - 1 and kwargs.get("add_special_tokens", None) is True:
-                kwargs['add_eos_token'] = self.add_eos_token
+                kwargs['add_eos_token'] = getattr(self, "eos_token", None)
             if token in no_split_token:
                 tokenized_text.append(token)
             else:

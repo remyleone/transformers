@@ -593,3 +593,6 @@ class WhisperTokenizerFast(PreTrainedTokenizerFast):
                 return []
 
         return token_ids
+
+    def _update_bos_eos_tokens(self):
+        return
