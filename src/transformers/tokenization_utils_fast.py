@@ -165,11 +165,11 @@ class PreTrainedTokenizerFast(PreTrainedTokenizerBase):
 
         self._add_bos_token = kwargs.get("add_bos_token", None)
         self._add_eos_token = kwargs.get("add_eos_token", None)
-        # self._added_tokens_decoder = self.added_tokens_decoder
-        # self._added_tokens_encoder = self.added_tokens_encoder
 
         # We call this after having initialized the backend tokenizer because we update it.
         super().__init__(**kwargs)
+
+        self._update_bos_eos_tokens()
 
         # Set the splitting mode for special tokens for the tokenizer to be used throughout the class.
         self._tokenizer.encode_special_tokens = self.split_special_tokens
@@ -188,12 +188,6 @@ class PreTrainedTokenizerFast(PreTrainedTokenizerBase):
         tokens_to_add += [
             token for token in self.all_special_tokens_extended if token not in encoder and token not in tokens_to_add
         ]
-
-        # if type(self) == PreTrainedTokenizerFast and all(item in kwargs for item in ["add_bos_token", "add_eos_token", "eos_token", "bos_token"]):
-        #     self.add_bos_token = kwargs.get("add_bos_token")
-        #     self.add_eos_token = kwargs.get("add_eos_token")
-        #     self._update_post_processor()
-
 
         if len(tokens_to_add) > 0:
             # super hack: if a token.special is set, tokenizer ignores it for now so FIXME @ArthurZ

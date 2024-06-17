@@ -846,8 +846,6 @@ class SpecialTokensMixin:
     def __init__(self, verbose=False, **kwargs):
         self._bos_token = None
         self._eos_token = None
-        self._add_bos_token = None
-        self._add_eos_token = None
         self._unk_token = None
         self._sep_token = None
         self._pad_token = None
