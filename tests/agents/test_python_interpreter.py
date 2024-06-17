@@ -365,7 +365,19 @@ if char.isalpha():
         assert result == "LATIN CAPITAL LETTER A"
 
     def test_multiple_comparators(self):
-        code = "0x30A0 <= ord('a') <= 0x30FF"
+        code = "0 <= -1 < 4 and 0 <= -5 < 4"
+        result = evaluate_python_code(code, BASE_PYTHON_TOOLS, state={})
+        assert not result
+
+        code = "0 <= 1 < 4 and 0 <= -5 < 4"
+        result = evaluate_python_code(code, BASE_PYTHON_TOOLS, state={})
+        assert not result
+
+        code = "0 <= 4 < 4 and 0 <= 3 < 4"
+        result = evaluate_python_code(code, BASE_PYTHON_TOOLS, state={})
+        assert not result
+
+        code = "0 <= 3 < 4 and 0 <= 3 < 4"
         result = evaluate_python_code(code, BASE_PYTHON_TOOLS, state={})
         assert result
 
@@ -617,3 +629,30 @@ S4 = S1.intersection(S2)
         evaluate_python_code(code, {}, state=state)
         assert state["S3"] == {"a"}
         assert state["S4"] == {"b", "c"}
+
+    def test_break(self):
+        code="""
+i = 0
+
+while True:
+    i+= 1
+    if i==3:
+        break
+
+i"""
+        result = evaluate_python_code(code, {"print": print, "round": round}, state={})
+        assert result == 3
+
+    def test_early_return(self):
+        code="""
+def add_one(n, shift):
+    if True:
+        return n + shift
+    return n
+
+add_one(1, 1)
+"""
+        state = {}
+        result = evaluate_python_code(code, {"print": print, "range": range, "ord": ord, "chr": chr}, state=state)
+        print(state)
+        assert result == 2
